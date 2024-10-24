@@ -4,104 +4,162 @@ from .forms import (CategoryForm, MovieForm, PaymentForm, ProfileForm,
                     ReviewForm, SubscriptionForm, UserForm, WatchListForm)
 
 # Category Views
+# views.py
+from django.shortcuts import render
+from django.db import connection
+
 def category_list(request):
-    categories = Category.objects.all()
-    return render(request, 'category_list.html', {'categories': categories})
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM movie_netflix.movie_netflix_category;")
+        rows = cursor.fetchall()
 
-def category_create(request):
-    if request.method == 'POST':
-        form = CategoryForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('category_list')
-    else:
-        form = CategoryForm()
-    return render(request, 'category_form.html', {'form': form})
+        # Optional: You can map the rows to a dictionary for better access in the template
+        columns = [col[0] for col in cursor.description]  # Get column names
+        categories = [dict(zip(columns, row)) for row in rows]  # Zip column names with row values
 
-def category_detail(request, pk):
-    category = get_object_or_404(Category, pk=pk)
-    return render(request, 'category_detail.html', {'category': category})
+    return render(request, 'categories.html', {'categories': categories})
 
-def category_update(request, pk):
-    category = get_object_or_404(Category, pk=pk)
-    if request.method == 'POST':
-        form = CategoryForm(request.POST, instance=category)
-        if form.is_valid():
-            form.save()
-            return redirect('category_list')
-    else:
-        form = CategoryForm(instance=category)
-    return render(request, 'category_form.html', {'form': form})
 
-def category_delete(request, pk):
-    category = get_object_or_404(Category, pk=pk)
-    if request.method == 'POST':
-        category.delete()
-        return redirect('category_list')
-    return render(request, 'category_confirm_delete.html', {'category': category})
-
-# Repeat similar views for Movie, Payment, Profile, Review, Subscription, User, and WatchList
-# Here’s an example for the Movie views:
-
-# Movie Views
 def movie_list(request):
-    movies = Movie.objects.all()
-    return render(request, 'movie_list.html', {'movies': movies})
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM movie_netflix.movie_netflix_movie;")
+        rows = cursor.fetchall()
+
+        # Get column names to use in the template
+        columns = [col[0] for col in cursor.description]
+
+        # Map rows to dictionaries with column names as keys
+        movies = [dict(zip(columns, row)) for row in rows]
+
+    return render(request, 'movies.html', {'movies': movies})
+
 
 def payment_list(request):
-    payments = Payment.objects.all()
-    return render(request, 'payment_list.html', {'payment': payments})
+    with connection.cursor() as cursor:
+        # Execute raw SQL query
+        cursor.execute("SELECT * FROM movie_netflix.movie_netflix_payment;")
+        rows = cursor.fetchall()
 
-def watch_list(request):
-    watch = WatchList.objects.all()
-    return render(request, 'watch_list.html', {'watch': watch})
+        # Get column names to use in the template
+        columns = [col[0] for col in cursor.description]
 
-def review_list(request):
-    reviews = Review.objects.all()
-    return render(request, 'review_list.html', {'review': reviews})
+        # Convert rows into dictionaries for better access in the template
+        payments = [dict(zip(columns, row)) for row in rows]
 
-def profile_list(request):
-    profile = Profile.objects.all()
-    return render(request, 'profile_list.html', {'profile': profile})
+    # Pass the result to the template
+    return render(request, 'payments.html', {'payments': payments})
 
 def user_list(request):
-    user = User.objects.all()
-    return render(request, 'user_list.html', {'user': user})
+    with connection.cursor() as cursor:
+        # Execute raw SQL query
+        cursor.execute("SELECT * FROM movie_netflix.movie_netflix_user;")
+        rows = cursor.fetchall()
+
+        # Get column names to use in the template
+        columns = [col[0] for col in cursor.description]
+
+        # Convert rows into dictionaries for better access in the template
+        users = [dict(zip(columns, row)) for row in rows]
+
+    # Pass the result to the template
+    return render(request, 'users.html', {'users': users})
 
 def subscription_list(request):
-    subscription =Subscription.objects.all()
-    return render(request, 'subscription_list.html', {'payment': subscription})
+    with connection.cursor() as cursor:
+        # Execute raw SQL query
+        cursor.execute("SELECT * FROM movie_netflix.movie_netflix_subscription;")
+        rows = cursor.fetchall()
 
-def movie_create(request):
-    if request.method == 'POST':
-        form = MovieForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('movie_list')
-    else:
-        form = MovieForm()
-    return render(request, 'movie_form.html', {'form': form})
+        # Get column names to use in the template
+        columns = [col[0] for col in cursor.description]
 
-def movie_detail(request, pk):
-    movie = get_object_or_404(Movie, pk=pk)
-    return render(request, 'movie_detail.html', {'movie': movie})
+        # Convert rows into dictionaries for better access in the template
+        subscriptions = [dict(zip(columns, row)) for row in rows]
 
-def movie_update(request, pk):
-    movie = get_object_or_404(Movie, pk=pk)
-    if request.method == 'POST':
-        form = MovieForm(request.POST, instance=movie)
-        if form.is_valid():
-            form.save()
-            return redirect('movie_list')
-    else:
-        form = MovieForm(instance=movie)
-    return render(request, 'movie_form.html', {'form': form})
+    # Pass the result to the template
+    return render(request, 'subscriptions.html', {'subscriptions': subscriptions})
 
-def movie_delete(request, pk):
-    movie = get_object_or_404(Movie, pk=pk)
-    if request.method == 'POST':
-        movie.delete()
-        return redirect('movie_list')
-    return render(request, 'movie_confirm_delete.html', {'movie': movie})
+def profile_list(request):
+    with connection.cursor() as cursor:
+        # Execute raw SQL query
+        cursor.execute("SELECT * FROM movie_netflix.movie_netflix_profile;")
+        rows = cursor.fetchall()
 
-# Continue with similar CRUD functions for Payment, Profile, Review, Subscription, User, WatchList
+        # Get column names to use in the template
+        columns = [col[0] for col in cursor.description]
+
+        # Convert rows into dictionaries for better access in the template
+        profiles = [dict(zip(columns, row)) for row in rows]
+
+    # Pass the result to the template
+    return render(request, 'profiles.html', {'profiles': profiles})
+
+def review_list(request):
+    with connection.cursor() as cursor:
+        # Execute raw SQL query
+        cursor.execute("SELECT * FROM movie_netflix.movie_netflix_review;")
+        rows = cursor.fetchall()
+
+        # Get column names to use in the template
+        columns = [col[0] for col in cursor.description]
+
+        # Convert rows into dictionaries for better access in the template
+        reviews = [dict(zip(columns, row)) for row in rows]
+
+    # Pass the result to the template
+    return render(request, 'reviews.html', {'reviews': reviews})
+
+def channel_list(request):
+    with connection.cursor() as cursor:
+        # Execute raw SQL query
+        cursor.execute("SELECT * FROM movie_netflix.movie_netflix_channel;")
+        rows = cursor.fetchall()
+
+        # Get column names to use in the template
+        columns = [col[0] for col in cursor.description]
+
+        # Convert rows into dictionaries for better access in the template
+        channels = [dict(zip(columns, row)) for row in rows]
+
+    # Pass the result to the template
+    return render(request, 'channels.html', {'channels': channels})
+
+
+
+def query(request):
+    with connection.cursor() as cursor:
+        # Execute the combined SQL query
+        cursor.execute("""
+            SELECT 
+                u.username AS user_name,
+                m.title AS movie_title,
+                c.category_name AS category,
+                ch.channel_name AS channel,
+                s.subscription_type AS subscription,
+                s.expiration_date AS subscription_expiration
+            FROM 
+                movie_netflix_user AS u
+            JOIN 
+                movie_netflix_profile AS p ON u.id = p.user_id
+            JOIN 
+                movie_netflix_subscription AS s ON p.id = s.profile_id
+            JOIN 
+                movie_netflix_payment AS pay ON u.id = pay.user_id
+            JOIN 
+                movie_netflix_movie AS m ON pay.movie_id = m.id
+            JOIN 
+                movie_netflix_category AS c ON m.category_id = c.id
+            JOIN 
+                movie_netflix_channel AS ch ON m.channel_id = ch.id
+            WHERE 
+                s.expiration_date > NOW()
+            ORDER BY 
+                u.username, m.title;
+        """)
+        
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        results = [dict(zip(columns, row)) for row in rows]
+
+    return render(request, 'query.html', {'results': results})
+

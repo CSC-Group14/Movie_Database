@@ -58,8 +58,10 @@ class Review(models.Model):
     def __str__(self):
         return f"{self.User_Id.username} - {self.Movie_Id.title}" 
     
+    
 class Subscription(models.Model):
-    Channel_Id = models.IntegerField()  # Channel ID as an integer
+    Subscription_id = models.AutoField(primary_key=True)
+    Channel_Id = models.ForeignKey('Channel', on_delete=models.CASCADE)  # Channel ID as an integer
     User_Id = models.ForeignKey('User', on_delete=models.CASCADE)  # Foreign key to User model
     Subscription_Type = models.CharField(max_length=255)  # Type of subscription
     Price = models.DecimalField(max_digits=10, decimal_places=2)  # Price of the subscription
@@ -67,6 +69,11 @@ class Subscription(models.Model):
 
     def __str__(self):
         return f"{self.User_Id.username} - {self.Subscription_Type}"
+
+class Channel(models.Model):
+    Channel_Id = models.AutoField(primary_key=True)    # Channel ID as an integer
+    Channel_name = models.CharField(max_length=255)  # Type of subscription
+    
 
 class User(models.Model):
     User_Id = models.AutoField(primary_key=True)  # Custom primary key for the user

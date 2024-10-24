@@ -1,0 +1,29 @@
+{% extends 'base_generic.html' %}
+
+{% block title %}Profiles{% endblock %}
+
+{% block content %}
+<h2>Profiles</h2>
+<table>
+    <thead>
+        <tr>
+            {% for col in profiles.0.keys %}
+            <th>{{ col }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for profile in profiles %}
+        <tr>
+            {% for value in profile.values %}
+            <td>{{ value }}</td>
+            {% endfor %}
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="100%">No profiles available.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

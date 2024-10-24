@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Django App{% endblock %}</title>
-     <!-- Include your CSS file -->
+    
 </head>
 <style>
     /* General styles */
@@ -102,26 +102,26 @@ footer {
 </style>
 <body>
     <header>
-        <h1>Django Application</h1>
+        <h1>Movie Database</h1>
         <nav>
             <ul>
                 <li><a href="{% url 'category_list' %}">Categories</a></li>
                 <li><a href="{% url 'movie_list' %}">Movies</a></li>
                 <li><a href="{% url 'payment_list' %}">Payments</a></li>
-                <li><a href="{% url 'profile_list' %}">Profiles</a></li>
-                <li><a href="{% url 'review_list' %}">Reviews</a></li>
+                 <li><a href="{% url 'user_list' %}">Users</a></li>
+                 <li><a href="{% url 'review_list' %}">Reviews</a></li>
+                 <li><a href="{% url 'channel_list' %}">Channels</a></li>
                 <li><a href="{% url 'subscription_list' %}">Subscriptions</a></li>
-                <li><a href="{% url 'user_list' %}">Users</a></li>
-                <li><a href="{% url 'watch_list' %}">Watch List</a></li>
-            </ul>
-        </nav>
+                <li><a href="{% url 'profile_list' %}">Profiles</a></li>
+                 <li><a href="{% url 'query' %}">User_info</a></li>
+        </nav> 
     </header>
     <main>
         {% block content %}
         {% endblock %}
     </main>
     <footer>
-        <p>&copy; 2024 Django Application</p>
+        <p>&copy; 2024 Movie_Netflix</p>
     </footer>
 </body>
 </html>

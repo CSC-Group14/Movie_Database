@@ -1,0 +1,35 @@
+{% extends 'base_generic.html' %}
+
+{% block title %}User Movie Information{% endblock %}
+
+{% block content %}
+<h2>User Movie Information</h2>
+<table>
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Movie Title</th>
+            <th>Category</th>
+            <th>Channel</th>
+            <th>Subscription</th>
+            <th>Expiration Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for result in results %}
+        <tr>
+            <td>{{ result.user_name }}</td>
+            <td>{{ result.movie_title }}</td>
+            <td>{{ result.category }}</td>
+            <td>{{ result.channel }}</td>
+            <td>{{ result.subscription }}</td>
+            <td>{{ result.subscription_expiration }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No movies found for users with active subscriptions.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
